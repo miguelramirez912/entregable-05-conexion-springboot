@@ -1,0 +1,54 @@
+# ========================================
+# Ignorar archivos y carpetas de Maven
+# ========================================
+/target/
+!.mvn/wrapper/maven-wrapper.jar
+
+# ========================================
+# Archivos del sistema
+# ========================================
+.DS_Store
+Thumbs.db
+
+# ========================================
+# Archivos de logs y temporales
+# ========================================
+*.log
+*.tmp
+
+# ========================================
+# Archivos del entorno local
+# ========================================
+.env
+application-local.properties
+application-local.yml
+
+# ========================================
+# Configuración de Eclipse / STS
+# ========================================
+.project
+.classpath
+.settings/
+.apt_generated/
+.factorypath
+.springBeans
+
+# ========================================
+# Archivos de IDEs adicionales (si usas otros)
+# ========================================
+.idea/
+.vscode/
+*.iml
+
+# ========================================
+# Archivos de compilación adicionales
+# ========================================
+/bin/
+/build/
+
+# ========================================
+# Archivos del wrapper (si se usan)
+# ========================================
+/.mvn/
+mvnw
+mvnw.cmd
