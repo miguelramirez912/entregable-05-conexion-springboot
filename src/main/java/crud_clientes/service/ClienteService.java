@@ -3,12 +3,14 @@ package crud_clientes.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import crud_clientes.dto.ClienteDto;
 import crud_clientes.entity.Cliente;
 import crud_clientes.repository.IClienteRepository;
 
+@Service
 public class ClienteService {
 	
 	@Autowired
