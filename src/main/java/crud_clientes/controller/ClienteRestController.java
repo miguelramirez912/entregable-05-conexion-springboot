@@ -11,10 +11,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import crud_clientes.dto.ClienteDto;
 import crud_clientes.entity.Cliente;
 import crud_clientes.service.ClienteService;
 
@@ -80,6 +83,30 @@ public class ClienteRestController {
 		
 		response.put("mensaje", "Cliente eliminado con exito");
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
+		
+	}
+	
+	//Crear cliente
+	@PostMapping("/clientes")
+	public ResponseEntity<?> crearCliente(@RequestBody ClienteDto cliente) {
+		
+		Cliente nuevoCliente = null;
+		
+		Map<String, Object> response = new HashMap<>();
+		
+		try {
+			
+			nuevoCliente = this.clienteService.createCliente(cliente);
+			
+		}catch(DataAccessException e){
+			response.put("mensaje", "No se pudo crear el cliente");
+			response.put("error", e.getMessage().concat(e.getMostSpecificCause().getLocalizedMessage()));
+			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		
+		response.put("mensaje", "El cliente creado con exito, con el ID");
+		response.put("cliente", nuevoCliente);
+		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
 		
 	}
 	
