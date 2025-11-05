@@ -4,9 +4,12 @@ import java.util.Date;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -21,6 +24,9 @@ public class Cliente {
 	private String email;
 	@Column(name = "fecha_creacion")
 	private Date createAt;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "tipoCliente_id")
+	private TipoCliente tipoCliente;
 	
 	public Long getId() {
 		return id;
@@ -52,6 +58,11 @@ public class Cliente {
 	public void setCreateAt(Date createAt) {
 		this.createAt = createAt;
 	}
+	public TipoCliente getTipoCliente() {
+		return tipoCliente;
+	}
+	public void setTipoCliente(TipoCliente tipoCliente) {
+		this.tipoCliente = tipoCliente;
+	}
 	
-	
-}
+	}
