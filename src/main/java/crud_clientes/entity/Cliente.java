@@ -2,6 +2,8 @@ package crud_clientes.entity;
 
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -10,10 +12,11 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 
 @Entity
-@Table (name = "clientes")
+@Table (name = "clientes", schema = "public")
 public class Cliente {
 
 	@Id
@@ -26,7 +29,13 @@ public class Cliente {
 	private Date createAt;
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "tipoCliente_id")
+	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 	private TipoCliente tipoCliente;
+	
+	@PrePersist
+	public void prePersist() {
+		createAt = new Date();
+	}
 	
 	public Long getId() {
 		return id;

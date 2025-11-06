@@ -8,8 +8,24 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "tipo_cliente", schema = "public")
+@Table(name = "tipo_cliente")
 public class TipoCliente {
+	
+	
+
+	public TipoCliente(Long id) {
+		super();
+		this.id = id;
+	}
+	
+	
+	
+	public TipoCliente() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

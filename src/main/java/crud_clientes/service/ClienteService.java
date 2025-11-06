@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import crud_clientes.dto.ClienteDto;
 import crud_clientes.entity.Cliente;
+import crud_clientes.entity.TipoCliente;
 import crud_clientes.repository.IClienteRepository;
 
 @Service
@@ -35,6 +36,7 @@ public class ClienteService {
 		clienteEntity.setNombre(clienteDto.getNombre());
 		clienteEntity.setApellido(clienteDto.getApellido());
 		clienteEntity.setEmail(clienteDto.getEmail());
+		clienteEntity.setTipoCliente(new TipoCliente(clienteDto.getTipoCliente().getId()));;
 		
 		return clienteRepository.save(clienteEntity);
 	}
@@ -43,4 +45,19 @@ public class ClienteService {
 	public void deleteCliente(Long id) {
 		clienteRepository.deleteById(id);
 	}
+	
+	//Actualizar Cliente
+	public Cliente actualizarCliente(ClienteDto clienteDto, Long id){
+		Cliente clienteEntity = new Cliente();
+		
+		clienteEntity.setId(id);
+		clienteEntity.setNombre(clienteDto.getNombre());
+		clienteEntity.setApellido(clienteDto.getApellido());
+		clienteEntity.setEmail(clienteDto.getEmail());
+		clienteEntity.setCreateAt(clienteDto.getCreateAt());
+		//clienteEntity.setTipoCliente(clienteDto.getTipoCliente());
+		
+		return clienteRepository.save(clienteEntity);
+	}
+	
 }

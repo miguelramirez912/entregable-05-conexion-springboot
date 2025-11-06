@@ -17,35 +17,35 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import crud_clientes.dto.ClienteDto;
-import crud_clientes.entity.Cliente;
-import crud_clientes.repository.IClienteRepository;
-import crud_clientes.service.ClienteService;
+
+import crud_clientes.dto.TipoClienteDto;
+import crud_clientes.entity.TipoCliente;
+import crud_clientes.service.TipoClienteService;
 
 @RestController
 @RequestMapping("/api")
-public class ClienteRestController {
-
-	@Autowired
-	private ClienteService clienteService;
+public class TipoClienteRestController {
 	
-	//Consultar todos los clientes
-	@GetMapping("/clientes")
+	@Autowired
+	TipoClienteService tipoClienteService;
+	
+	//Consultar todos los tipos de clientes
+	@GetMapping("/tipo-cliente")
 	@ResponseStatus(HttpStatus.OK)
-	public List<Cliente> consulta(){
-		return clienteService.findAll();
+	public List<TipoCliente> consultar(){
+		return tipoClienteService.consultarTiposCliente();
 	}
 	
-	//Consultar un cliente por id
-	@GetMapping("/clientes/{id}")
+	//Consultar tipo de cliente por id
+	@GetMapping("/tipo-cliente/{id}")
 	@ResponseStatus(HttpStatus.OK)
-	public ResponseEntity<?> consultaPorId(@PathVariable Long id) {
-		Cliente clienteEncontrado = null;
+	public ResponseEntity<?> consultarTipoClientePorId(@PathVariable Long id) {
+		TipoCliente tipoClienteEncontrado = null;
 		String response = "";
 		
-		try{
+		try {
 			
-			clienteEncontrado = clienteService.findById(id);
+			tipoClienteEncontrado = tipoClienteService.consultarTipoCliente(id);
 			
 		}catch(DataAccessException e) {
 			response = "Error al realizar la consulta";
@@ -53,28 +53,28 @@ public class ClienteRestController {
 			return new ResponseEntity<String>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		
-		if(clienteEncontrado == null) {
-			response = "El cliente con el ID ".concat(id.toString()).concat(" no existe en la base de datos");
-			return new ResponseEntity<String>(response, HttpStatus.NOT_FOUND);
+		if(tipoClienteEncontrado == null) {
+			response = "El tipo de cliente con el ID".concat(id.toString()).concat(" no existe en la base de datos");
+			return new ResponseEntity<String>(response,HttpStatus.NOT_FOUND);
 		}
 		
-		return new ResponseEntity<Cliente>(clienteEncontrado, HttpStatus.OK);
+		return new ResponseEntity<TipoCliente>(tipoClienteEncontrado, HttpStatus.OK);
 	}
 	
-	//Borrar cliente por id
-	@DeleteMapping("/clientes/{id}")
-	public ResponseEntity<?> borrarPorId(@PathVariable Long id){
-		Map<String,Object> response = new HashMap<>();
+	//Borrar tipo de cliente por id
+	@DeleteMapping("/tipo-cliente/{id}")
+	public ResponseEntity<?> borrarTipoClientePorId(@PathVariable Long id){
+		Map<String, Object> response = new HashMap<>();
 		
 		try {
-			Cliente clienteABorrar = this.clienteService.findById(id);
+			TipoCliente tipoClienteABorrar = this.tipoClienteService.consultarTipoCliente(id);
 			
-			if(clienteABorrar == null) {
-				response.put("mensaje", "Error al eliminar, el cliente no existe en la base de datos");
+			if(tipoClienteABorrar == null) {
+				response.put("mensaje", "Error al eliminar, el tipo de cliente no existe en la base de datos");
 				return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 			}
 			
-			clienteService.deleteCliente(id);
+			tipoClienteService.elimiarTipoCliente(id);
 			
 		}catch(DataAccessException e) {
 			response.put("mensaje", "Error al eliminar en base de datos");
@@ -82,22 +82,22 @@ public class ClienteRestController {
 			return new ResponseEntity<Map<String,Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		
-		response.put("mensaje", "Cliente eliminado con exito");
+		response.put("mensaje", "Tipo de Cliente eliminado con exito");
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
 		
 	}
 	
-	//Crear cliente
-	@PostMapping("/clientes")
-	public ResponseEntity<?> crearCliente(@RequestBody ClienteDto cliente) {
+	//Crear tipo de cliente
+	@PostMapping("/tipo-cliente")
+	public ResponseEntity<?> crearCliente(@RequestBody TipoClienteDto tipoClienteDto) {
 		
-		Cliente nuevoCliente = null;
+		TipoCliente nuevoTipoCliente = null;
 		
 		Map<String, Object> response = new HashMap<>();
 		
 		try {
 			
-			nuevoCliente = this.clienteService.createCliente(cliente);
+			nuevoTipoCliente = this.tipoClienteService.crearCliente(tipoClienteDto);
 			
 		}catch(DataAccessException e){
 			response.put("mensaje", "No se pudo crear el cliente");
@@ -105,27 +105,26 @@ public class ClienteRestController {
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		
-		response.put("mensaje", "El cliente creado con exito, con el ID");
-		response.put("cliente", nuevoCliente);
+		response.put("mensaje", "El Tipo de Cliente creado con exito, con el ID");
+		response.put("tipoCliente", nuevoTipoCliente);
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
 		
 	}
 	
-	//Actualizar Cliente
-	@PostMapping("/clientes/{id}")
-	public ResponseEntity<?> actualizarCliente(@PathVariable Long id, @RequestBody ClienteDto clienteDto){
+	//Actualizar tipo de cliente
+	@PostMapping("/tipo-cliente/{id}")
+	public ResponseEntity<?> actualizarCliente(@PathVariable Long id, @RequestBody TipoClienteDto tipoClienteDto){
 		
-		Cliente clienteAActualizar = null;
-		Cliente clienteActualizado = null;
+		TipoCliente tipoClienteAActualizar = null;
+		TipoCliente tipoClienteActualizado = null;
 		String response = "";
 		
 		try {
 			//Encontrar cliente en BD
-			clienteAActualizar = this.clienteService.findById(id);
-			// Actualizar lo el 
+			tipoClienteAActualizar = this.tipoClienteService.consultarTipoCliente(id);
 			
 			//Guardarlo con save (metodo
-			clienteActualizado =  this.clienteService.actualizarCliente(clienteDto, id);
+			tipoClienteActualizado =  this.tipoClienteService.actualizarTipoCliente(tipoClienteDto, id);
 			
 		}catch(DataAccessException e){
 			response = "Error al realizar la consulta";
@@ -133,14 +132,12 @@ public class ClienteRestController {
 			return new ResponseEntity<String>(response, HttpStatus.INTERNAL_SERVER_ERROR);		
 		}
 		
-		if(clienteAActualizar == null) {
-			response = "Error al realizar la actualización. Cliente no encontrado";
+		if(tipoClienteAActualizar == null) {
+			response = "Error al realizar la actualización. El tipo de cliente no fue encontrado";
 			return new ResponseEntity<String>(response, HttpStatus.NOT_FOUND);
 		}
 		
-		return new ResponseEntity<Cliente>(clienteActualizado, HttpStatus.OK);
+		return new ResponseEntity<TipoCliente>(tipoClienteActualizado, HttpStatus.OK);
 		
 	}
-	
-	
 }

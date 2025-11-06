@@ -3,6 +3,8 @@ package crud_clientes.dto;
 import java.io.Serializable;
 import java.util.Date;
 
+import crud_clientes.entity.TipoCliente;
+
 public class ClienteDto implements Serializable {
 	
 	/**
@@ -14,7 +16,14 @@ public class ClienteDto implements Serializable {
 	private String apellido;
 	private String email;
 	private Date createAt;
+	private TipoClienteDto tipoCliente;
 	
+	public TipoClienteDto getTipoCliente() {
+		return tipoCliente;
+	}
+	public void setTipoCliente(TipoClienteDto tipoCliente) {
+		this.tipoCliente = tipoCliente;
+	}
 	public String getNombre() {
 		return nombre;
 	}
@@ -39,7 +48,6 @@ public class ClienteDto implements Serializable {
 	public void setCreateAt(Date createAt) {
 		this.createAt = createAt;
 	}
-	
 	
 	
 
